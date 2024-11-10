@@ -1,0 +1,29 @@
+name: Python Application CI
+
+on:
+  push:
+    branches: [main]  # Trigger the workflow on push to the main branch
+  pull_request:
+    branches: [main]  # Trigger the workflow on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Checks out your repository's code
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Specifies the Python version (use '3.8', '3.9', etc., if needed)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Installs dependencies from requirements.txt
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s tests  # Runs tests from the 'tests' directory
