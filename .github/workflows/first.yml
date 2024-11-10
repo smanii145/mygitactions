@@ -21,9 +21,9 @@ jobs:
         with:
           python-version: '3.x'  # Use '3.8' or '3.9' if needed
 
-      # Step 3: Cache dependencies to speed up builds
+      # Step 3: Cache dependencies to speed up builds (updated to v3)
       - name: Cache pip dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -40,4 +40,3 @@ jobs:
       - name: Run tests
         run: |
           python -m unittest discover -s tests
-
