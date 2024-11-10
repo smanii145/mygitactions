@@ -2,28 +2,42 @@ name: Python Application CI
 
 on:
   push:
-    branches: [main]  # Trigger the workflow on push to the main branch
+    branches: [main]
   pull_request:
-    branches: [main]  # Trigger the workflow on pull requests to the main branch
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the code from the repository
       - name: Checkout repository
-        uses: actions/checkout@v2  # Checks out your repository's code
+        uses: actions/checkout@v2
 
+      # Step 2: Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'  # Specifies the Python version (use '3.8', '3.9', etc., if needed)
+          python-version: '3.x'  # Use '3.8' or '3.9' if needed
 
+      # Step 3: Cache dependencies to speed up builds
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Installs dependencies from requirements.txt
+          pip install -r requirements.txt
 
+      # Step 5: Run tests
       - name: Run tests
         run: |
-          python -m unittest discover -s tests  # Runs tests from the 'tests' directory
+          python -m unittest discover -s tests
+
