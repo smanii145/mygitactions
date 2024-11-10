@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code from the repository
+      # Step 1: Checkout the repository code
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -19,24 +19,24 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'  # Use '3.8' or '3.9' if needed
+          python-version: '3.x'  # You can specify the exact version like '3.8' if needed
 
-      # Step 3: Cache dependencies to speed up builds (updated to v3)
+      # Step 3: Cache pip dependencies to speed up builds
       - name: Cache pip dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      # Step 4: Install dependencies
+      # Step 4: Install dependencies from requirements.txt
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Use correct path if it's in a subfolder
+          pip install -r requirements.txt
 
-      # Step 5: Run tests
+      # Step 5: Run tests using unittest
       - name: Run tests
         run: |
-          python -m unittest discover -s tests
+          python -m unittest discover
